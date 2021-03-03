@@ -48,6 +48,7 @@ namespace ApiServer
 
             //2. register data dependency injection - use Sql database data
             services.AddScoped<IAlimentRepository, AlimentRepository>();
+            services.AddScoped<IAlimentRepositoryAsync, AlimentRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
