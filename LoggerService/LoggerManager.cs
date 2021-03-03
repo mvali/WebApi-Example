@@ -2,9 +2,7 @@
 
 namespace LoggerService
 {
-    // how to: https://blog.elmah.io/nlog-tutorial-the-essential-guide-for-logging-from-csharp/
-
-    class LoggerManager : ILoggerManager
+    public class LoggerManager : ILoggerManager
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
         public LoggerManager()

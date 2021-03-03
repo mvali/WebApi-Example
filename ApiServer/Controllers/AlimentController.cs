@@ -4,10 +4,9 @@ using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Repository.DbData;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using LoggerService;
 
 namespace ApiServer.Controllers
 {
@@ -24,14 +23,22 @@ namespace ApiServer.Controllers
         //Good create constructor for dependency to be injected
         private readonly IAlimentRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ILogger _log;           // logging with native Microsoft.Extensions.Logging
+        private readonly ILoggerManager _logm; // logging with NLog
+
+        //public ILogger Log => _log; // diferent way to use Log instead of _log (Microsoft.Extensions.Logging)
+
+        //private readonly ILoggerManager _log;
         //private readonly ConnectionStrings _connectionStrings2; // different way to get connString without EF
         //public IConfiguration _configuration3 { get; }
 
         //public AlimentController(IAlimentRepository repository, IMapper mapper, IOptions<ConnectionStrings> connectionStrings2, IConfiguration configuration3)
-        public AlimentController(IAlimentRepository repository, IMapper mapper)
+        public AlimentController(IAlimentRepository repository, IMapper mapper, ILogger<AlimentController> log, ILoggerManager logm)
         {
             _repository = repository;
             _mapper = mapper;
+            _log = log;
+            _logm = logm;
             //_connectionStrings2 = connectionStrings2.Value;
             //string connStr = _configuration3.GetConnectionString("DefaultConnection");
         }
@@ -41,6 +48,9 @@ namespace ApiServer.Controllers
         {
             // return list of models mapped by AutoMapper
             var items = _repository.GetAllAliments();
+
+            _log.LogWarning("LogInformation from controller");
+            _logm.LogWarn("LogInformation from controller NLog");
 
             // give 200 (Ok) response
             return Ok(_mapper.Map<IEnumerable<AlimentReadDto>>(items));
@@ -53,6 +63,9 @@ namespace ApiServer.Controllers
             var item = _repository.GetAlimentById(id);
             if (item != null)
             {
+                _log.LogInformation($"LogInformation from controller id={id}");
+                _logm.LogInfo($"LogInformation from controller id={id} NLog");
+
                 // return map of databaseModel done by AutoMapper
                 return Ok(_mapper.Map<AlimentReadDto>(item));
             }

@@ -1,4 +1,5 @@
 using Entities.Contracts;
+using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using NLog;
 using Repository;
 using Repository.DbData;
-using Repository.Moq;
 using System;
 
 namespace ApiServer
@@ -18,6 +19,8 @@ namespace ApiServer
     {
         public Startup(IConfiguration configuration)
         {
+            // configure NLog
+            LogManager.LoadConfiguration(System.String.Concat(System.IO.Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -26,9 +29,10 @@ namespace ApiServer
         // This method gets called by the runtime. Use this method to add services to the container.
 
         // Register service lifetime:
-        //  - AddSingleton - same for every request
-        //  - AddScoped    - created once per client request
-        //  - Transient    - new instance created every time
+        //  - AddSingleton - same for every request - All components are sharing the same service every time they need it.
+        //  - AddScoped    - created once per client request - Whenever we send the HTTP request towards the application, a new instance of the service is created
+        //  - Transient    - new instance created every time - If during one request on our application, 
+        //                              multiple components need the service, this service will be created again for every single component
         public void ConfigureServices(IServiceCollection services)
         {
             //2. use sql server with EntityFramework
@@ -36,6 +40,9 @@ namespace ApiServer
 
             //2.1 Map the connection configuration - without EntityFramework
             //services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+
+            // configure NLOg
+            StartupConfig.ConfigureLoggerService(services);
 
             //4. Add Newtonsoft Json serialization .core V5
             services.AddControllers().AddNewtonsoftJson(s=>{s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();});
@@ -78,5 +85,6 @@ namespace ApiServer
                 endpoints.MapControllers();
             });
         }
+
     }
 }
