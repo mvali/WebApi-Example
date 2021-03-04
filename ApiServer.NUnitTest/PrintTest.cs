@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System;
 
-namespace NUnitTestApiServer
+namespace ApiServer.NUnitTest
 {
     // posted here for fast inspection and quick access to object details
     public interface IPrinterStatus { } // used as mock on functions for a bit more testing cases

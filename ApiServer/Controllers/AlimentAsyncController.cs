@@ -28,15 +28,17 @@ namespace ApiServer.Controllers
         //Good create constructor for dependency to be injected
         private readonly IAlimentRepositoryAsync _repository;
         private readonly IMapper _mapper;
-        private readonly LoggerService.ILoggerManager _logger; // to test logs
+        private readonly ILogger _log;           // logging with native Microsoft.Extensions.Logging
+        private readonly ILoggerManager _logm; // logging with NLog
 
         //public AlimentController(IAlimentRepository repository, IMapper mapper, IOptions<ConnectionStrings> connectionStrings2, IConfiguration configuration3)
         //public AlimentAsyncController(IAlimentRepositoryAsync repository, IMapper mapper, ILoggerManager logger)
-        public AlimentAsyncController(IAlimentRepositoryAsync repository, IMapper mapper)
+        public AlimentAsyncController(IAlimentRepositoryAsync repository, IMapper mapper, ILogger<AlimentController> log, ILoggerManager logm)
         {
             _repository = repository;
             _mapper = mapper;
-            //_logger = logger;
+            _log = log;
+            _logm = logm;
         }
         // GET api/alimentasync
         [HttpGet]
@@ -44,6 +46,9 @@ namespace ApiServer.Controllers
         {
             // return list of models mapped by AutoMapper
             var items = await _repository.GetAllAlimentsAsync();
+
+            _log.LogWarning("LogInformation from controllerAsync");
+            _logm.LogWarn("LogInformation from controllerAsync NLog");
 
             var retObj = _mapper.Map<IEnumerable<AlimentReadDto>>(items);
 
@@ -58,7 +63,11 @@ namespace ApiServer.Controllers
         public async Task<ActionResult<AlimentReadDto>> GetAlimentById(int id)
         {
             var item = await _repository.GetAlimentByIdAsync(id);
-            if (item != null)
+
+            _log.LogInformation($"LogInformation from controller id={id}");
+            _logm.LogInfo($"LogInformation from controller id={id} NLog");
+
+                if (item != null)
             {
                 // return map of databaseModel done by AutoMapper
                 return Ok(_mapper.Map<AlimentReadDto>(item));
@@ -154,7 +163,7 @@ namespace ApiServer.Controllers
         [Route("api/alimentasync/cancelationtest")]
         public async Task<ActionResult<IEnumerable<AlimentReadDto>>> CancelationTest(CancellationToken cancellationToken)
         {
-            _logger.LogInfo("Starting SlowTask will last for 10sec");
+            _log.LogInformation("Starting SlowTask will last for 10sec");
 
             // slow async action, e.g. call external api
             await Task.Delay(10_000, cancellationToken);
@@ -164,13 +173,13 @@ namespace ApiServer.Controllers
 
             var retObj = _mapper.Map<IEnumerable<AlimentReadDto>>(items);
 
-            _logger.LogInfo("Finished 5 seconds delay on SlowTask");
+            _log.LogInformation("Finished 5 seconds delay on SlowTask");
 
             for (int i = 0; i < 5; i++)// have another 10x1sec delay
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 // slow non-cancellable work
-                Thread.Sleep(1000); _logger.LogInfo($"Passed {i}sec");
+                Thread.Sleep(1000); _log.LogInformation($"Passed {i}sec");
             }
 
             // give 200 (Ok) response

@@ -61,11 +61,12 @@ namespace ApiServer.Controllers
         public ActionResult<AlimentReadDto> GetAlimentById(int id)
         {
             var item = _repository.GetAlimentById(id);
+
+            _log.LogInformation($"LogInformation from controller id={id}");
+            _logm.LogInfo($"LogInformation from controller id={id} NLog");
+
             if (item != null)
             {
-                _log.LogInformation($"LogInformation from controller id={id}");
-                _logm.LogInfo($"LogInformation from controller id={id} NLog");
-
                 // return map of databaseModel done by AutoMapper
                 return Ok(_mapper.Map<AlimentReadDto>(item));
             }

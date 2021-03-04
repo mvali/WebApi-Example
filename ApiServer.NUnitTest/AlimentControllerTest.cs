@@ -4,18 +4,20 @@ using AutoMapper;
 using Entities.Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using LoggerService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Repository.Moq;
 
-namespace NUnitTestApiServer
+namespace ApiServer.NUnitTest
 {
     // Install Moq, NUnit nuget package
     // Each test must have it's own unit tests
@@ -26,9 +28,12 @@ namespace NUnitTestApiServer
         private Mock<IAlimentRepository> alimentRepoMock;
         private Mock<JsonPatchDocument<AlimentUpdateDto>> alimentUpdateDto;
         private Mock<IAliment> alimentMock;
+        private Mock<ILogger<AlimentController>> logMock;
+        private Mock<ILoggerManager> logmMock;
         private IAliment aliment;
         private AlimentMoq alimentMoq;
         private JsonPatchDocument<AlimentUpdateDto> jsonpatchDocu_alimUpDto;
+        private ILoggerManager log;
 
         [SetUp]
         public void Setup()
@@ -40,6 +45,8 @@ namespace NUnitTestApiServer
             alimentMock = new Mock<IAliment>();
             alimentUpdateDto = new Mock<JsonPatchDocument<AlimentUpdateDto>>();
             jsonpatchDocu_alimUpDto = new JsonPatchDocument<AlimentUpdateDto>();
+            logMock = new Mock<ILogger<AlimentController>>();
+            logmMock = new Mock<ILoggerManager>();
 
             // we are not adding, we are replacing a value
             jsonpatchDocu_alimUpDto.Replace(x => x.Name, "name test");
@@ -54,8 +61,9 @@ namespace NUnitTestApiServer
                 //cfg.AddProfile(new SomeOtherMappingProfile());
             });
             var mapper = config.CreateMapper();
+            log = new LoggerService.LoggerManager();
 
-            controller = new AlimentController(alimentRepoMock.Object, mapper);
+            controller = new AlimentController(alimentRepoMock.Object, mapper, logMock.Object, log);
         }
 
         // Each test must have it's own unit tests
@@ -100,6 +108,8 @@ namespace NUnitTestApiServer
             //alimentRepoMock.Verify(x => x.UpdateAliment(alimentMock.Object), Times.Once()); // asked once with aliment object
             alimentRepoMock.Verify(x => x.UpdateAliment(It.IsAny<Aliment>()), Times.Once()); // asked once with aliment object
 
+            log.LogInfo("Logging from TestMethod: UpdateShouldReturnTrue");
+
             Assert.AreEqual(StatusCodes.Status204NoContent, resultCode.StatusCode);
         }
 
@@ -133,7 +143,7 @@ namespace NUnitTestApiServer
                                               It.IsNotNull<object>())
             );
             // create controller with test data
-            controller = new AlimentController(alimentRepoMock.Object, mapper);
+            controller = new AlimentController(alimentRepoMock.Object, mapper, logMock.Object, log);
             // inject Validator into your controller - Before ACT function
             controller.ObjectValidator = objectValidator.Object;
 

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{C00D84B6-E829-49F2-9952-635CDF4C6F12}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NUnitTestApiServer", "NUnitTestApiServer\NUnitTestApiServer.csproj", "{8B623EF6-2136-468E-85A3-062EA5E0FB01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NUnitTestApiServer", "ApiServer.NUnitTest\ApiServer.NUnitTest.csproj", "{8B623EF6-2136-468E-85A3-062EA5E0FB01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
