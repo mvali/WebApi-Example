@@ -2,6 +2,7 @@
 using Entities.DataTransferObjects;
 using Entities.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Repository.Moq
 {
@@ -55,6 +56,15 @@ namespace Repository.Moq
         {
             return new AlimentPatch() { op = "replace", path = "/line", value = "mok test value" };
         }
+        public void AddTestData(DbData.SqlContext context)
+        {
+            var x = GetAllAliments();
+            foreach (Aliment item in x)
+            {
+                context.Aliments.Add(item);
+            }
+            context.SaveChanges();
+        }
 
     }
     public class AlimentPatch
@@ -64,7 +74,8 @@ namespace Repository.Moq
         public string value { get; set; }
     }
 }
-/* // switch data between tables with/out identity
+
+/* // script for switching data between tables with/out identity
  CREATE TABLE Test
  (
    id int identity(1,1),

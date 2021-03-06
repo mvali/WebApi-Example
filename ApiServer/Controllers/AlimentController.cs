@@ -28,19 +28,12 @@ namespace ApiServer.Controllers
 
         //public ILogger Log => _log; // diferent way to use Log instead of _log (Microsoft.Extensions.Logging)
 
-        //private readonly ILoggerManager _log;
-        //private readonly ConnectionStrings _connectionStrings2; // different way to get connString without EF
-        //public IConfiguration _configuration3 { get; }
-
-        //public AlimentController(IAlimentRepository repository, IMapper mapper, IOptions<ConnectionStrings> connectionStrings2, IConfiguration configuration3)
         public AlimentController(IAlimentRepository repository, IMapper mapper, ILogger<AlimentController> log, ILoggerManager logm)
         {
             _repository = repository;
             _mapper = mapper;
             _log = log;
             _logm = logm;
-            //_connectionStrings2 = connectionStrings2.Value;
-            //string connStr = _configuration3.GetConnectionString("DefaultConnection");
         }
         // GET api/aliment
         [HttpGet]
@@ -57,7 +50,10 @@ namespace ApiServer.Controllers
         }
 
         // GET api/aliment/{id}
-        [HttpGet("{id}", Name = "GetAlimentById")]
+        [HttpGet("{id}", Name = "GetAlimentById"), ActionName("getactionname")]  
+                //{id} parameter is required,  use {id?} if optional, 
+                // "Name" property with value "GetAlimentById" is used for CreatedAtRoute function to send the 201Created response to POST request
+                // "ActionName" attribute used as route
         public ActionResult<AlimentReadDto> GetAlimentById(int id)
         {
             var item = _repository.GetAlimentById(id);

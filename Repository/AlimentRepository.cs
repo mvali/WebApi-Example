@@ -42,7 +42,9 @@ namespace Repository
                 throw new ArgumentNullException(nameof(cmd));
 
             // command is created but data will be saved when SaveChanges is also called
-            _context.Aliments.Add((Aliment)cmd);
+            //_context.Aliments.Add((Aliment)cmd);
+            CreateAliment(cmd);
+
             return Task.CompletedTask;
         }
 
@@ -56,7 +58,9 @@ namespace Repository
         {
             if (cmd == null)
                 throw new NotImplementedException();
-            _context.Aliments.Remove((Aliment)cmd);
+
+            //_context.Aliments.Remove((Aliment)cmd);
+            DeleteAliment(cmd);
 
             return Task.CompletedTask;
         }

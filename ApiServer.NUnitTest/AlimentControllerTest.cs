@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using Repository.Moq;
 
@@ -64,8 +63,35 @@ namespace ApiServer.NUnitTest
             log = new LoggerService.LoggerManager();
 
             controller = new AlimentController(alimentRepoMock.Object, mapper, logMock.Object, log);
+
+            /*var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<Repository.DbData.SqlContext>()
+            .UseInMemoryDatabase(databaseName: "test")
+            .Options; */
         }
 
+/*        // used for InMemory data
+        public static SqlContext GetTestDbContext(string dbName)
+        {
+            // Create db context options specifying in memory database
+            var options = new DbContextOptionsBuilder<SqlContext>()
+            .UseInMemoryDatabase(databaseName: dbName)
+            .Options;
+
+            //Use this to instantiate the db context
+            return new SqlContext(options);
+        }
+        private SqlContext GetTestDatabase()
+        {
+            //Get the context
+            var testContext = GetTestDbContext("test");
+
+            //Add some dummy categories to in memory db
+            var fixture = new Aliment();
+            var mockCategories = fixture.Create<List<Aliment>>();
+            testContext.AddRange(mockCategories);
+            return testContext;
+        }
+*/
         // Each test must have it's own unit tests
         [Test]
         public void AlimentMethodCheck()
@@ -114,7 +140,7 @@ namespace ApiServer.NUnitTest
         }
 
         [Test]
-        public void PatchUpdate()
+        public void PatchUpdate_ShouldBeTrue_WhenDatainIsOk()
         {
             var services = new ServiceCollection();
 

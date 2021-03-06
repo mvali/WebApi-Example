@@ -2,6 +2,7 @@ using Entities.Contracts;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using NLog;
 using Repository;
 using Repository.DbData;
+using Repository.Moq;
 using System;
 
 namespace ApiServer
@@ -37,6 +39,14 @@ namespace ApiServer
         {
             //2. use sql server with EntityFramework
             services.AddDbContext<SqlContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            // does not behave like normal relational Db
+            //services.AddDbContext<SqlContext>(opt => opt.UseInMemoryDatabase(databaseName: "ApiServerDb"), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+
+            /*// SqlLite InMemory database - you must recreate tables, fill data each time as Db gets distroyed when app is closed
+            var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
+            var keepAliveConnection = new SqliteConnection(connectionString);
+            keepAliveConnection.Open();
+            services.AddDbContext<SqlContext>(options => { options.UseSqlite(connectionString); });*/
 
             //2.1 Map the connection configuration - without EntityFramework
             //services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
@@ -72,6 +82,18 @@ namespace ApiServer
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiServer v1"));
+
+                /*
+                // seeding InMemory data - Only allowed for Singleton services
+                // Singleton services can be resolved by constructor injection in Middleware
+                //var context = app.ApplicationServices.GetService<SqlContext>();
+                //new AlimentMoq().AddTestData(context);
+
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var _sqlContext = scope.ServiceProvider.GetRequiredService<SqlContext>();
+                    new AlimentMoq().AddTestData(_sqlContext);
+                }*/
             }
 
             app.UseHttpsRedirection();
