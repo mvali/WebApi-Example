@@ -8,5 +8,7 @@ namespace Entities.Contracts
 {
     public interface ICartRepository
     {
+        IEnumerable<ICartItem> GetAll();
+        ICartItem GetById(int id);
     }
 }

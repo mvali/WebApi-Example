@@ -18,6 +18,7 @@ namespace ApiServer.Controllers
     // Synchronous method
     // ControllerBase is controller without view support - (view we do not need-it)
 
+    //[ApiExplorerSettings(IgnoreApi = true, GroupName = nameof(AlimentAsyncController))]
     [Route("api/[controller]")] // general rule
     [ApiController]
     public class AlimentAsyncController : ControllerBase

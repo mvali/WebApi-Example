@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.NUnitTest", "ApiServer.NUnitTest\ApiServer.NUnitTest.csproj", "{8B623EF6-2136-468E-85A3-062EA5E0FB01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiServer.xUnitTest", "ApiServer.xUnitTest\ApiServer.xUnitTest.csproj", "{5DF41B98-A5F5-4976-9ADD-A161C48BF337}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer.xUnitTest", "ApiServer.xUnitTest\ApiServer.xUnitTest.csproj", "{5DF41B98-A5F5-4976-9ADD-A161C48BF337}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

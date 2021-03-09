@@ -1,6 +1,8 @@
-﻿namespace Entities.Contracts
+﻿using Entities.Contracts;
+
+namespace Entities.Models
 {
-    public interface ICartItem
+    public class CartItem : ICartItem
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }

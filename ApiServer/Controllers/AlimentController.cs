@@ -13,6 +13,7 @@ namespace ApiServer.Controllers
     // Synchronous method
     // ControllerBase is controller without view support - (view we do not need-it)
 
+    //[ApiExplorerSettings(IgnoreApi = true, GroupName = nameof(AlimentController))] // ApiExplorer description 
     [Route("api/[controller]")] // general rule
     [ApiController]
     public class AlimentController : ControllerBase
@@ -45,12 +46,14 @@ namespace ApiServer.Controllers
             _log.LogWarning("LogInformation from controller");
             _logm.LogWarn("LogInformation from controller NLog");
 
+            var objRet = _mapper.Map<IEnumerable<AlimentReadDto>>(items);
+
             // give 200 (Ok) response
-            return Ok(_mapper.Map<IEnumerable<AlimentReadDto>>(items));
+            return Ok(objRet);
         }
 
         // GET api/aliment/{id}
-        [HttpGet("{id}", Name = "GetAlimentById"), ActionName("getactionname")]  
+        [HttpGet("{id}", Name = "GetAlimentById"), ActionName("getactionname")]
                 //{id} parameter is required,  use {id?} if optional, 
                 // "Name" property with value "GetAlimentById" is used for CreatedAtRoute function to send the 201Created response to POST request
                 // "ActionName" attribute used as route
@@ -63,8 +66,10 @@ namespace ApiServer.Controllers
 
             if (item != null)
             {
+                var objReaddto = _mapper.Map<AlimentReadDto>(item);
+
                 // return map of databaseModel done by AutoMapper
-                return Ok(_mapper.Map<AlimentReadDto>(item));
+                return Ok(objReaddto);
             }
             return NotFound();
         }

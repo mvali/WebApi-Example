@@ -35,15 +35,15 @@ namespace ApiServer.xUnitTest
             _controller = new AlimentController(_alimentRepository, _mapper, _logger, _logm);
         }
 
-        //[Fact] // fact and Theory can not be both alive over the same method, Fact Methods can not have parameters, testData
-        [Theory] // used for testing with multiple sets of data
+        [Fact] // fact and Theory can not be both alive over the same method, Fact Methods can not have parameters, testData
+        /*[Theory] // used for testing with multiple sets of data
         [InlineData(1, "Vali")] // parameters for tested method
         [InlineData(2, "John")]
-        //public void Update_ShouldReturnTrue_WhenDataAvailable()
-        public void Update_ShouldReturnTrue_WhenDataAvailable(int alimentId, string name)
+        public void Update_ShouldReturnTrue_WhenDataAvailable(int alimentId, string name) */
+        public void Update_ShouldReturnTrue_WhenDataAvailable()
         {
             // ARRANGE
-            //const int alimentId = 1; // activated for FACT
+            const int alimentId = 1; // activated for FACT
             //IAliment aliment =  new AlimentMoq().GetAlimentById(alimentId); // data from AlimentMoq
             IAliment aliment = _fixture.Build<Aliment>() // data generated automatically
                                        .With(x => x.Id, alimentId)
