@@ -1,7 +1,7 @@
 ﻿using Entities.Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using Repository.DbData;
+using Repository.DbConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;

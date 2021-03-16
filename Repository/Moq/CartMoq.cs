@@ -1,7 +1,7 @@
 ﻿using Entities.Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using Repository.DbData;
+using Repository.DbConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Repository
         {
             List<CartItem> cartItems = new List<CartItem>{
                 new CartItem(){ ProductId=1, Quantity=5, Price=200d},
-                new CartItem(){ProductId=2, Quantity=10, Price=125}
+                new CartItem(){ ProductId=2, Quantity=10, Price=125}
             };
             return cartItems;
         }

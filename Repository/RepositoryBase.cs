@@ -1,6 +1,6 @@
 ﻿using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
-using Repository.DbData;
+using Repository.DbConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;

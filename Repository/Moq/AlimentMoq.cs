@@ -56,7 +56,7 @@ namespace Repository.Moq
         {
             return new AlimentPatch() { op = "replace", path = "/line", value = "mok test value" };
         }
-        public void AddTestData(DbData.SqlContext context)
+        public void AddTestData(DbConfig.SqlContext context)
         {
             var x = GetAllAliments();
             foreach (Aliment item in x)

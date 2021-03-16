@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace ApiServer.Controllers
 {
-    // Documenting apis with ApiExplorer
+    /* // Documenting apis with ApiExplorer
     public class DocumentationController : Controller
     {
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
@@ -17,5 +17,5 @@ namespace ApiServer.Controllers
             // needs services.AddMvc(); to be aded in Startup / ConfigureServices
             return View(_apiExplorer);
         }
-    }
+    }*/
 }

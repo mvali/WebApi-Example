@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using LoggerService;
+using Microsoft.AspNetCore.Http;
 
 namespace ApiServer.Controllers
 {
@@ -36,8 +37,10 @@ namespace ApiServer.Controllers
             _log = log;
             _logm = logm;
         }
+        /// <response code="200">Returns the found object</response>
         // GET api/aliment
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<AlimentReadDto>> GetAllAliments()
         {
             // return list of models mapped by AutoMapper
@@ -52,11 +55,15 @@ namespace ApiServer.Controllers
             return Ok(objRet);
         }
 
+        /// <response code="200">Returns the found object</response>
+        /// <response code="404">If the item is not found</response>
         // GET api/aliment/{id}
         [HttpGet("{id}", Name = "GetAlimentById"), ActionName("getactionname")]
-                //{id} parameter is required,  use {id?} if optional, 
-                // "Name" property with value "GetAlimentById" is used for CreatedAtRoute function to send the 201Created response to POST request
-                // "ActionName" attribute used as route
+        //{id} parameter is required,  use {id?} if optional, 
+        // "Name" property with value "GetAlimentById" is used for CreatedAtRoute function to send the 201Created response to POST request
+        // "ActionName" attribute used as route
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<AlimentReadDto> GetAlimentById(int id)
         {
             var item = _repository.GetAlimentById(id);
@@ -71,12 +78,16 @@ namespace ApiServer.Controllers
                 // return map of databaseModel done by AutoMapper
                 return Ok(objReaddto);
             }
-            return NotFound();
+            return  NotFound();
         }
 
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If form is not validated</response>
         // Use Postman-> Body/raw - json
         // POST api/aliment   for Inserting data
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<AlimentReadDto> CreateAliment(AlimentCreateDto alimentCreateDto)
         {
             var alimentModel = _mapper.Map<Aliment>(alimentCreateDto);

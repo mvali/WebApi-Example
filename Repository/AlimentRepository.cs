@@ -1,9 +1,10 @@
 ﻿using Entities.Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using Repository.DbData;
+using Repository.DbConfig;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -98,5 +99,37 @@ namespace Repository
             // nohing to do here for now, actions made by SaveChanges
             return Task.CompletedTask;
         }
+
+        public List<Aliment> AlimentsGet(int id, string param1)
+        {
+            List<Aliment> retValue = null;
+
+            var parameters = new List<SqlParameter> { 
+                new ( "@id", id ),
+                new ("@param1", param1)
+            };
+            // this is available in .NetFramework, not in Core
+            //var result = _context.Database.SqlQuery
+
+            return retValue;
+        }
+
+
+        // methods for executing stored procedures in Core:
+        //  DbSet<TEntity>.FromSql()
+        //  DbContext.Database.ExecuteSqlCommand()
+        /*
+        1- Create a View from select part of sql query --without where condition--.
+        2- Then generate your model from database and Entity Framework generates a model for your view.
+        3- Now you can execute your stored procedure using generated model from view
+        dbContext.GeneratedView.FromSqlRaw("MyStoredProcedure {0}, {1} ", param1, param2)
+         */
+
+        /*public IEnumerable<StudentDetail> GetStudentDetails(int ssid)
+        {
+            var ssidParam = new SqlParameter("@ssid", ssid);
+            var result = _appDbContext.StudentDetails.FromSql("exec GetStudentDetail @ssid", ssidParam).AsNoTracking().ToList();
+            return result;
+        }*/
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Repository.DbData;
+using Repository.DbConfig;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

@@ -16,7 +16,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Repository;
-using Repository.DbData;
+using Repository.DbConfig;
 using Repository.Moq;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -25,6 +25,8 @@ namespace ApiServer
 {
     public class Startup
     {
+        //private readonly string swaggerBasePath = "api/help";
+
         public Startup(IConfiguration configuration)
         {
             // configure NLog
@@ -134,12 +136,14 @@ namespace ApiServer
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();               // swagger it's based on mvc component: ApiExplorer
+                //app.UseSwagger(options => options.RouteTemplate = swaggerBasePath + "/swagger/{documentName}/swagger.json");
                                                 //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiServer v1"));
                 app.UseSwaggerUI(options =>
                 {// build a swagger endpoint for each discovered API version  
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
                         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                        options.RoutePrefix = string.Empty;
                         options.DefaultModelExpandDepth(1);
                         options.DefaultModelsExpandDepth(-1);
                         options.DefaultModelRendering(Swashbuckle.AspNetCore.SwaggerUI.ModelRendering.Example);
@@ -176,9 +180,9 @@ namespace ApiServer
                 endpoints.MapControllers();
 
                 // for MVC part of ApiExplorer
-                endpoints.MapControllerRoute(
+                /*endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Documentation}/{action=Index}/{id?}");
+                    pattern: "{controller=Documentation}/{action=Index}/{id?}"); */
             });
         }
 

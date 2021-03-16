@@ -1,4 +1,5 @@
 ﻿using Entities.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -55,9 +56,13 @@ namespace ApiServer.Controllers
             return Ok(product);
         }
 
+        /// <response code="200">Action completed successfully</response>
+        /// <response code="204">For testing when param1 <= 0</response>
         [HttpGet]
         [Route("/api/[controller]/dataaction")]
         [MapToApiVersion("1.0")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult PrelucrateDataActon(int param1, decimal param2)
         {
             if (param1 > 0)
